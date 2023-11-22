@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 
 @Injectable()
 export class MapsService {
-
   async getGeocode(zipCode: string): Promise<any> {
     //axiosRespose
     console.log(zipCode);
@@ -24,6 +23,49 @@ export class MapsService {
       };
     } catch (e) {
       throw new Error(e);
+    }
+  }
+
+  async getNearbyZipCodes(
+    latitude: string,
+    longitude: string,
+    radius: string,
+  ): Promise<any> {
+    const config = {
+      maxResultCount: 4,
+      locationRestriction: {
+        circle: {
+          center: {
+            latitude,
+            longitude,
+          },
+          radius,
+        },
+      },
+    };
+
+    try {
+      const response = await axios.post(
+        'https://places.googleapis.com/v1/places:searchNearby',
+        config,
+        {
+          headers: {
+            'X-Goog-Api-Key': process.env.MAPS_API_KEY,
+            'X-Goog-FieldMask': 'places.addressComponents',
+          },
+        },
+      );
+      const zipCodes = response.data.places.map((result) => {
+        const addressComponents = result.addressComponents;
+        return addressComponents.find((component) =>
+          component.types.includes('postal_code'),
+        ).longText;
+      });
+
+      return zipCodes;
+    } catch (error) {
+      //TODO - handle error in a better way
+       throw new Error(error.response.data);
     }
   }
 }
