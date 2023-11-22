@@ -11,8 +11,17 @@ datasource db {
 }
 
 model Users {
-  id    Int     @default(autoincrement()) @id
-  email String  @unique
-  name  String
-  password String
+  id             Int              @id @default(autoincrement())
+  email          String           @unique
+  name           String
+  password       String
+  NearBySearches NearBySearches[]
+}
+
+model NearBySearches {
+  id             Int    @id @default(autoincrement())
+  author         Int
+  entry_zip_code String
+  radius         Int
+  user_id        Users  @relation(fields: [author], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
