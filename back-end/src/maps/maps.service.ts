@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException } from '@nestjs/common';
 import axios from 'axios';
 
 @Injectable()
@@ -22,6 +22,7 @@ export class MapsService {
         status: response.data.status,
       };
     } catch (e) {
+      // TODO tratar de forma melhor o erro
       throw new Error(e);
     }
   }
@@ -64,8 +65,7 @@ export class MapsService {
 
       return zipCodes;
     } catch (error) {
-      //TODO - handle error in a better way
-       throw new Error(error.response.data);
+       throw new HttpException(error.response.data, error.response.status);
     }
   }
 }
