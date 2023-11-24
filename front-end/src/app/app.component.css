@@ -1,0 +1,18 @@
+main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  box-sizing: inherit;
+  position: relative;
+}
+
+app-toolbar {
+  display: block;
+  width: 100%;
+
+  color: white;
+  /* padding: 10px; Ajuste o padding conforme necessário */
+  box-sizing: border-box; /* Inclui padding na largura total */
+}
