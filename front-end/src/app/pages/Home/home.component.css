@@ -22,3 +22,12 @@ main {
     flex-direction: row;
     align-items: center;
   }
+
+  .table {
+    width: 50%;
+  }
+
+  .mat-table {
+    overflow: auto;
+    max-height: 300px;
+  }

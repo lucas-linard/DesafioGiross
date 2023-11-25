@@ -15,20 +15,21 @@ import { ZipCodesService } from '../../services/zip-codes.service';
 import { NearBySearchDTO } from '../../DTOs/nearBySearch.DTO';
 
 export interface PeriodicElement {
-  name: string;
+  CEP: string;
+  raio: number;
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [
-  { name: 'Hydrogen' },
-  { name: 'Helium' },
-  { name: 'Lithium' },
-  { name: 'Beryllium' },
-  { name: 'Boron' },
-  { name: 'Carbon' },
-  { name: 'Nitrogen' },
-  { name: 'Oxygen' },
-  { name: 'Fluorine' },
-  { name: 'Neon' },
+  { CEP: 'Hydrogen', raio: 1.0079 },
+  { CEP: 'Helium', raio: 1.0079 },
+  { CEP: 'Lithium', raio: 1.0079 },
+  { CEP: 'Beryllium', raio: 1.0079 },
+  { CEP: 'Boron', raio: 1.0079 },
+  { CEP: 'Carbon', raio: 1.0079 },
+  { CEP: 'Nitrogen', raio: 1.0079 },
+  { CEP: 'Oxygen', raio: 1.0079 },
+  { CEP: 'Fluorine', raio: 1.0079 },
+  { CEP: 'Neon', raio: 1.0079 },
 ];
 
 @Component({
@@ -68,7 +69,7 @@ export class HomeComponent implements OnInit {
     radius: [0],
   });
 
-  displayedColumns: string[] = ['name'];
+  displayedColumns: string[] = ['CEP', 'Raio'];
   dataSource = ELEMENT_DATA;
 
   async getInput() {
@@ -81,7 +82,9 @@ export class HomeComponent implements OnInit {
 
     api.subscribe((data) => {
       let zipCodes = data as string[];
-      this.searchResult = `resultado: \n\n${zipCodes.map((zip) => `\n ${zip}`)}`;
+      this.searchResult = `resultado: \n\n${zipCodes.map(
+        (zip) => `\n ${zip}`
+      )}`;
     });
 
     console.log(this.payload.value);
