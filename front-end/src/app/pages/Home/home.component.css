@@ -1,33 +1,26 @@
 main {
-    width: 100%;
-    min-height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 1rem;
-    box-sizing: inherit;
-  }
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  box-sizing: inherit;
+}
 
-  .VStack {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem;
-    gap: 1rem;
-  }
+.VStack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  gap: 1rem;
+}
 
-  .HStack {
-    display: flex;
-    height: 100%;
-    flex-direction: row;
-    align-items: center;
-  }
+.HStack {
+  display: flex;
+  height: 100%;
+  flex-direction: row;
+  align-items: center;
+}
 
-  .table {
-    width: 50%;
-  }
 
-  .mat-table {
-    overflow: auto;
-    max-height: 300px;
-  }
