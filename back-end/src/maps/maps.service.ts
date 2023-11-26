@@ -5,7 +5,6 @@ import axios from 'axios';
 export class MapsService {
   async getGeocode(zipCode: string): Promise<any> {
     //axiosRespose
-    console.log(zipCode);
     try {
       const response = await axios.get(
         `https://maps.googleapis.com/maps/api/geocode/json?address=${zipCode}&key=${process.env.MAPS_API_KEY}`,
@@ -33,7 +32,7 @@ export class MapsService {
     radius: string,
   ): Promise<any> {
     const config = {
-      maxResultCount: 4,
+      maxResultCount: 10,
       locationRestriction: {
         circle: {
           center: {
