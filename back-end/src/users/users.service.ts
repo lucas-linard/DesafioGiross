@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { Users } from '@prisma/client';
 import { prismaClient } from 'prisma/prismaCliente';
 import { userDTO } from 'src/DTOs/user.DTO';
+import { hash } from "bcryptjs";
 
 @Injectable()
 export class UsersService {
@@ -23,11 +24,12 @@ export class UsersService {
         return {msg :'Já existe um usuário com este e-mail.'};
       }
 
+      const hashedPassword = await hash(userInput.password, 8);
       await prismaClient.users.create({
         data: {
           name: userInput.name,
           email: userInput.email,
-          password: userInput.password,
+          password: hashedPassword,
         },
       });
 
