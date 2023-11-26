@@ -1,24 +1,39 @@
-import { Injectable } from '@nestjs/common';
-
-// This should be a real class/interface representing a user entity
-export type User = any;
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { Users } from '@prisma/client';
+import { prismaClient } from 'prisma/prismaCliente';
+import { userDTO } from 'src/DTOs/user.DTO';
 
 @Injectable()
 export class UsersService {
-  private readonly users = [
-    {
-      userId: 1,
-      username: 'john',
-      password: 'changeme',
-    },
-    {
-      userId: 2,
-      username: 'maria',
-      password: 'guess',
-    },
-  ];
+  async findOne(email: string): Promise<Users | null> {
+    const user = await prismaClient.users.findUnique({
+      where: {
+        email,
+      },
+    });
+    return user;
+  }
 
-  async findOne(username: string): Promise<User | undefined> {
-    return this.users.find(user => user.username === username);
+  async create(userInput: userDTO): Promise<string | null> {
+    console.log(userInput);
+    try {
+      const existingUser = await this.findOne(userInput.email);
+
+      if (existingUser) {
+        return 'Já existe um usuário com este e-mail.';
+      }
+
+      await prismaClient.users.create({
+        data: {
+          name: userInput.name,
+          email: userInput.email,
+          password: userInput.password,
+        },
+      });
+
+      return 'OK';
+    } catch (error) {
+      throw new BadRequestException(`Erro ao criar usuário: ${error.message}`);
+    }
   }
 }
