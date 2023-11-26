@@ -14,13 +14,13 @@ export class UsersService {
     return user;
   }
 
-  async create(userInput: userDTO): Promise<string | null> {
+  async create(userInput: userDTO): Promise<object | null> {
     console.log(userInput);
     try {
       const existingUser = await this.findOne(userInput.email);
 
       if (existingUser) {
-        return 'Já existe um usuário com este e-mail.';
+        return {msg :'Já existe um usuário com este e-mail.'};
       }
 
       await prismaClient.users.create({
@@ -31,7 +31,7 @@ export class UsersService {
         },
       });
 
-      return 'OK';
+      return {msg: 'OK'};
     } catch (error) {
       throw new BadRequestException(`Erro ao criar usuário: ${error.message}`);
     }
