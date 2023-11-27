@@ -1,0 +1,77 @@
+<style>
+  :host {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  main {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    box-sizing: inherit;
+    position: relative;
+  }
+
+  .VStack {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .HStack {
+    display: flex;
+    flex-direction: row;
+    padding: 1rem;
+    gap: 1rem;
+  }
+</style>
+
+<main>
+  <div style="margin-top: 36px; width: 30%">
+    <mat-card>
+      <mat-card-header style="justify-content: center">
+        <mat-card-title>Login</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form class="VStack" [formGroup]="payload">
+          <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input matInput name="email" formControlName="email" />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Senha</mat-label>
+            <input
+              type="password"
+              matInput
+              name="password"
+              formControlName="password"
+            />
+          </mat-form-field>
+          {{
+            loginFailed === true
+              ? "Email/senha incorretos, revise e tente novamente"
+              : ""
+          }}
+          <button
+            mat-flat-button
+            [disabled]="submitOnProcess"
+            (click)="authenticate()"
+            color="primary"
+          >
+            {{ submitOnProcess ? "Entrando..." : "Entrar" }}
+          </button>
+          <div class="HStack" style="justify-content: center">
+            <span>Ainda não tem uma conta?</span>
+            <a routerLink="/login">criar</a>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</main>
