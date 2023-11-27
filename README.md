@@ -1,5 +1,30 @@
 ### Desafio do Sistema de Consulta de CEPs
 
+#### Para iniciar o projeto
+1. **Preencher o arquivo .env de exemplo**
+ em back-end/.env
+2. **npm i tanto no back como no front**
+```
+npx i
+```
+3. **Iniciar as migrations do prisma**
+```
+npx prisma migrate deploy
+```
+4. **Iniciar o back-end**
+```
+npm run start:dev
+```
+5. **Iniciar o Front-end**
+```
+ng serve --open
+```
+
+Detalhe importante: devido as limitação da API do google ultilzado, o numero máximo de resultados são 20 CEPs.
+Seria necessario a pesquisa de uma outra API que entregue
+o resultado esperado!
+
+
 #### Objetivo:
 Desenvolver um sistema multiplataforma que permita aos usuários logados realizar consultas de CEPs baseadas em um raio de distância específico e exibir os resultados em uma tabela. Além disso, é necessário ter uma página de histórico para visualização das consultas realizadas.
 
