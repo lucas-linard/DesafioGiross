@@ -10,9 +10,12 @@ export class AuthService {
   ) {}
 //@t
   async signIn(signParams : {email: string, password: string}) {
-
+    
     const user = await this.usersService.findOne(signParams.email);
-   
+    
+    if (!user) {
+      throw new UnauthorizedException("Usuário não encontrado");
+    }
     if (!compareSync(signParams.password, user.password)) {
       throw new UnauthorizedException();
     }
