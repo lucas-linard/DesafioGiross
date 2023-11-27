@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { RouterModule, RouterOutlet, Router } from '@angular/router';
 
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatInputModule } from '@angular/material/input';
@@ -11,26 +11,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 
 import { HttpClientModule } from '@angular/common/http';
-import { ZipCodesService } from '../../services/zip-codes.service';
+import { ZipCodesService } from '../../services/zipCodes/zip-codes.service';
 import { NearBySearchDTO } from '../../DTOs/nearBySearch.DTO';
 
-export interface PeriodicElement {
-  CEP: string;
-  raio: number;
+export interface HistoryTable {
+  entry_zip_code: string;
+  radius: number;
 }
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  { CEP: 'Hydrogen', raio: 1.0079 },
-  { CEP: 'Helium', raio: 1.0079 },
-  { CEP: 'Lithium', raio: 1.0079 },
-  { CEP: 'Beryllium', raio: 1.0079 },
-  { CEP: 'Boron', raio: 1.0079 },
-  { CEP: 'Carbon', raio: 1.0079 },
-  { CEP: 'Nitrogen', raio: 1.0079 },
-  { CEP: 'Oxygen', raio: 1.0079 },
-  { CEP: 'Fluorine', raio: 1.0079 },
-  { CEP: 'Neon', raio: 1.0079 },
-];
 
 @Component({
   selector: 'app-home',
@@ -54,12 +41,30 @@ const ELEMENT_DATA: PeriodicElement[] = [
   styleUrl: './home.component.css',
 })
 export class HomeComponent implements OnInit {
+  token: string | null = null;
+
   constructor(
     private formBuilder: FormBuilder,
-    private apiService: ZipCodesService
+    private apiService: ZipCodesService,
+    private router: Router
   ) {}
 
-  async ngOnInit(): Promise<void> {}
+  async ngOnInit(): Promise<void> {
+    this.token = localStorage.getItem('token');
+    if (this.token == null) {
+      //route to login
+      this.router.navigate(['/login']);
+    } else {
+      try {
+        let api = await this.apiService.getHistory(this.token);
+
+        api.subscribe((data) => {
+          //@ts-ignore
+          this.tableDataSource = data.data as HistoryTable[];
+        });
+      } catch (error) {}
+    }
+  }
 
   users: any[] = [];
   searchResult: string = '';
@@ -69,25 +74,30 @@ export class HomeComponent implements OnInit {
     radius: [0],
   });
 
-  displayedColumns: string[] = ['CEP', 'Raio'];
-  dataSource = ELEMENT_DATA;
+  displayedColumns: string[] = ['entry_zip_code', 'radius'];
+  tableDataSource = [] as HistoryTable[];
 
   async getInput() {
     let referenceData: NearBySearchDTO = {
       zip: this.payload.value.zipCode,
       radius: this.payload.value.radius,
+      token: this.token,
     } as NearBySearchDTO;
 
     let api = await this.apiService.getSearchNearby(referenceData);
 
     api.subscribe((data) => {
+      this.tableDataSource.push({
+        //@ts-ignore
+        entry_zip_code: this.payload.value.zipCode,
+        //@ts-ignore
+        radius: this.payload.value.radius,
+      });
       let zipCodes = data as string[];
       this.searchResult = `resultado: \n\n${zipCodes.map(
         (zip) => `\n ${zip}`
       )}`;
     });
-
-    console.log(this.payload.value);
   }
 
   title = 'front-end';
