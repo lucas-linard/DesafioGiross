@@ -13,9 +13,11 @@ import { NearBySearchesService } from './near-by-searches.service';
 export class NearBySearchesController {
   constructor(private readonly NearBySearches: NearBySearchesService) {}
 
-  @Get('/:author')
-  getNearBySearches(@Param('author') author: string): Promise<any> {
-    return this.NearBySearches.getNearBySearches(parseInt(author));
+  @Get('')
+  getNearBySearches(@Request() req): Promise<any> {
+    return this.NearBySearches.getNearBySearches(
+      req.headers.authorization.split(' ')[1],
+    );
   }
 
   @Post('')

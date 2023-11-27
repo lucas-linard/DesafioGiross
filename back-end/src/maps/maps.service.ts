@@ -44,6 +44,7 @@ export class MapsService {
       },
     };
 
+
     try {
       const response = await axios.post(
         'https://places.googleapis.com/v1/places:searchNearby',
@@ -55,6 +56,10 @@ export class MapsService {
           },
         },
       );
+
+     
+      
+
       const zipCodes = response.data.places.map((result) => {
         const addressComponents = result.addressComponents;
         return addressComponents.find((component) =>

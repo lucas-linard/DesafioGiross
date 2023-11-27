@@ -1,13 +1,17 @@
 import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { prismaClient } from 'prisma/prismaCliente';
 
 @Injectable()
 export class NearBySearchesService {
-  async getNearBySearches(authorId: number) {
+  constructor(private jwtService: JwtService) {}
+
+  async getNearBySearches(token: string) {
     try {
+      const { id: author } = this.jwtService.decode(token) as { id: number };
       const data = await prismaClient.nearBySearches.findMany({
         where: {
-          author: authorId,
+          author,
         },
       });
       return {
